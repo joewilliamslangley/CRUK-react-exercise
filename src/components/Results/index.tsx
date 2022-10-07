@@ -8,8 +8,20 @@ type ResultsProps = {
 
 export const Results = ({ searchParams }: ResultsProps) => {
   const { data, error, isLoading } = useNasaQuery(searchParams);
+  const searchItems = data?.collection.items
+  searchItems?.slice(0,10).forEach((item) => {
+    console.log(item.href)
+  })
 
-  return <Text>Results goes here</Text>;
+  if (searchItems !== undefined) {
+    return (
+      <div>
+        {searchItems?.slice(0,10).map((item) => (
+          <Text>{item.href}</Text>
+        ))}
+      </div>
+    )
+  }
 };
 
 export default Results;
