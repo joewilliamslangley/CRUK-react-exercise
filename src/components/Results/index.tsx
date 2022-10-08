@@ -9,9 +9,9 @@ type ResultsProps = {
 export const Results = ({ searchParams }: ResultsProps) => {
   const { data, error, isLoading } = useNasaQuery(searchParams);
   const searchItems = data?.collection.items
-  searchItems?.slice(0,10).forEach((item) => {
-    console.log(item.href)
-  })
+  // searchItems?.slice(0,10).forEach((item) => {
+  //   console.log(item.href)
+  // })
 
   if (searchItems !== undefined) {
     return (

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Heading, Box } from "@cruk/cruk-react-components";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -18,11 +19,17 @@ interface IFormInputs {
 }
 
 export const HomePage = () => {
+  const [params, setParams] = useState({})
+  const [isSearch, setIsSearch] = useState(false)
+
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
   });
 
-  const submitForm = (data: object) => {console.log(data)}
+  const submitForm = (data: object) => {
+    setParams(data)
+    setIsSearch(true)
+  }
 
   const exampleParam: NasaSearchParams = {
     keywords: "moon",
@@ -51,7 +58,7 @@ export const HomePage = () => {
 
       </form>
 
-      <Results searchParams={exampleParam} />
+      {isSearch ? <Results searchParams={params}/> : null}
     </Box>
   );
 };
