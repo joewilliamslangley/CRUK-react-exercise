@@ -12,21 +12,18 @@ export const Results = ({ searchParams }: ResultsProps) => {
   // searchItems?.slice(0,10).forEach((item) => {
   //   console.log(item.href)
   // })
-  const renderResults = () => {
-    if (isLoading) {
-      return <Loader />
-    }
-    return (
-      <div>
-        {searchItems?.slice(0,10).map((item) => (
-          <Text>{item.href}</Text>
-        ))}
-      </div>
-    )
+  if (isLoading) {
+    return <Loader />
   }
-
-  return renderResults()
+  return (
+    <div>
+      {searchItems?.slice(0,10).map((item) => (
+        <Text>{item.href}</Text>
+      ))}
+    </div>
+  )
 }
+
 
 
 
