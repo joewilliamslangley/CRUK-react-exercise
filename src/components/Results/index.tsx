@@ -1,4 +1,4 @@
-import { Text } from "@cruk/cruk-react-components";
+import { Text, Loader } from "@cruk/cruk-react-components";
 import { NasaSearchParams } from "../../types";
 import useNasaQuery from "../../hooks/useNasaQuery";
 
@@ -12,8 +12,10 @@ export const Results = ({ searchParams }: ResultsProps) => {
   // searchItems?.slice(0,10).forEach((item) => {
   //   console.log(item.href)
   // })
-
-  if (searchItems !== undefined) {
+  const renderResults = () => {
+    if (isLoading) {
+      return <Loader />
+    }
     return (
       <div>
         {searchItems?.slice(0,10).map((item) => (
@@ -22,6 +24,10 @@ export const Results = ({ searchParams }: ResultsProps) => {
       </div>
     )
   }
-};
+
+  return renderResults()
+}
+
+
 
 export default Results;
