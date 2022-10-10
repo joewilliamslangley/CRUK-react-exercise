@@ -21,6 +21,7 @@ interface IFormInputs {
 export const HomePage = () => {
   const [params, setParams] = useState({})
   const [isSearch, setIsSearch] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<IFormInputs>({
     resolver: yupResolver(schema),
@@ -36,6 +37,10 @@ export const HomePage = () => {
     yearStart: 2000,
     mediaType: "image",
   };
+
+  const onLoad = (status: boolean) => {
+    setIsLoading(status)
+  }
 
   return (
     <Box marginTop="s" paddingTop="s">
@@ -90,10 +95,16 @@ export const HomePage = () => {
             />}
         />
 
-        <Button appearance="primary" type="submit">Submit</Button>
+        <Button
+          appearance="primary"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? "Submitting..." : "Submit"}
+        </Button>
       </form>
 
-      {isSearch ? <Results searchParams={params}/> : null}
+      {isSearch ? <Results searchParams={params} onLoad={onLoad}/> : null}
     </Box>
   );
 };
