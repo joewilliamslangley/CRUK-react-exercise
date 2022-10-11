@@ -1,6 +1,7 @@
-import { Text, Loader } from "@cruk/cruk-react-components";
+import { Link, Loader } from "@cruk/cruk-react-components";
 import { NasaSearchParams } from "../../types";
 import useNasaQuery from "../../hooks/useNasaQuery";
+import useReturnContent from "../../hooks/useReturnContent";
 
 type ResultsProps = {
   searchParams: NasaSearchParams,
@@ -8,37 +9,20 @@ type ResultsProps = {
 };
 
 export const Results = ({ searchParams, onLoad }: ResultsProps) => {
-  const { data, error, isLoading } = useNasaQuery(searchParams);
-  const searchItems = data?.collection.items
+  const { data } = useNasaQuery(searchParams)
+  const queryResults = useReturnContent(data)
+  const isLoading = queryResults.some(query => query.isLoading)
   onLoad(isLoading)
-  // searchItems?.slice(0,10).forEach((item) => {
-  //   console.log(item.href)
-  // })
+
+
   if (isLoading) {
     return <Loader />
   }
 
-  if (error) {
-    return <Text>{error.message}</Text>
-  }
-
-  // let hrefs = [];
-  // console.log(searchItems)
-  // searchItems?.slice(0,10).map((item) => {
-  //   const { href } = item
-  //   const query = useQuery([href], () =>
-  //     fetch(href).then((res) => res.json())
-  //   );
-  //   if (query.isLoading) {
-  //     return <Loader />
-  //   }
-  //   console.log(data)
-  //   hrefs.push(query.data)
-  // })
   return (
     <div>
-      {searchItems?.slice(0,10).map((item) => (
-        <Text key={item.href}>{item.href}</Text>
+      {queryResults?.map((query) => (
+        <Link href={query.data[0]} key={query.data[0]}>{query.data[0]}</Link>
       ))}
     </div>
   )
