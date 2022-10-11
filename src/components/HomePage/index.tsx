@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, SyntheticEvent } from "react";
 import { Heading, Box, TextField, Select, Button } from "@cruk/cruk-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -6,17 +6,20 @@ import * as yup from "yup"
 import { NasaSearchParams } from "../../types";
 import Results from "../Results";
 
+
 const schema = yup.object().shape({
   keywords: yup.string().min(2, "Keywords must have at least 2 characters.").max(50, "keywords must have at most 50 characters.").required(),
   yearStart: yup.number().typeError("Please enter a valid number.").integer("Please enter a valid number.").min(1900, "Year start must be after 1900.").max(new Date().getFullYear(), "Year start must not be in the future.").notRequired(),
   mediaType: yup.string().oneOf(['audio', 'video', 'image'], "Please select a media type.").required("Please select a media type.")
 });
 
-// interface IFormInputs {
-//   keywords: string,
-//   yearStart: number,
-//   mediaType: string
-// }
+function onPromise<T>(promise: (event: SyntheticEvent) => Promise<T>) {
+  return (event: SyntheticEvent) => {
+    if (promise) {
+      promise(event).catch(() => null);
+    }
+  };
+}
 
 export const HomePage = () => {
   const exampleParam: NasaSearchParams = {
@@ -33,10 +36,10 @@ export const HomePage = () => {
     resolver: yupResolver(schema),
   });
 
-  const submitForm = (data: NasaSearchParams) => {
+  const onSubmit = handleSubmit((data: NasaSearchParams) => {
     setParams(data)
     setIsSearch(true)
-  }
+  })
 
   const onLoad = (status: boolean) => {
     setIsLoading(status)
@@ -46,7 +49,7 @@ export const HomePage = () => {
     <Box marginTop="s" paddingTop="s">
       <Heading h1>React Exercise</Heading>
 
-      <form onSubmit={handleSubmit(submitForm)}>
+      <form onSubmit={onPromise(onSubmit)}>
         <Controller
           name="keywords"
           control={control}
