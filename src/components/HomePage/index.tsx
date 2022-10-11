@@ -12,31 +12,31 @@ const schema = yup.object().shape({
   mediaType: yup.string().oneOf(['audio', 'video', 'image'], "Please select a media type.").required("Please select a media type.")
 });
 
-interface IFormInputs {
-  keywords: string,
-  yearStart: number,
-  mediaType: string
-}
+// interface IFormInputs {
+//   keywords: string,
+//   yearStart: number,
+//   mediaType: string
+// }
 
 export const HomePage = () => {
-  const [params, setParams] = useState({})
-  const [isSearch, setIsSearch] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const { register, handleSubmit, control, formState: { errors } } = useForm<IFormInputs>({
-    resolver: yupResolver(schema),
-  });
-
-  const submitForm = (data: object) => {
-    setParams(data)
-    setIsSearch(true)
-  }
-
   const exampleParam: NasaSearchParams = {
     keywords: "moon",
     yearStart: 2000,
     mediaType: "image",
   };
+
+  const [params, setParams] = useState(exampleParam)
+  const [isSearch, setIsSearch] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({
+    resolver: yupResolver(schema),
+  });
+
+  const submitForm = (data: NasaSearchParams) => {
+    setParams(data)
+    setIsSearch(true)
+  }
 
   const onLoad = (status: boolean) => {
     setIsLoading(status)
@@ -65,7 +65,7 @@ export const HomePage = () => {
         <Controller
           name="mediaType"
           control={control}
-          defaultValue=""
+          defaultValue="image"
           render={({ field: { onChange } }) =>
             <Select
               onChange={onChange}
@@ -74,7 +74,7 @@ export const HomePage = () => {
               hasError={typeof errors.mediaType !== "undefined" }
               errorMessage={errors.mediaType?.message}
             >
-              <option disabled selected value> -- select an option -- </option>
+              <option disabled selected value=""> -- select an option -- </option>
               <option value="audio">Audio</option>
               <option value="video">Video</option>
               <option value="image">Image</option>

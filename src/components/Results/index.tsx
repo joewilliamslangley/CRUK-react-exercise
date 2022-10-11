@@ -17,10 +17,28 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   if (isLoading) {
     return <Loader />
   }
+
+  if (error) {
+    return <Text>{error.message}</Text>
+  }
+
+  // let hrefs = [];
+  // console.log(searchItems)
+  // searchItems?.slice(0,10).map((item) => {
+  //   const { href } = item
+  //   const query = useQuery([href], () =>
+  //     fetch(href).then((res) => res.json())
+  //   );
+  //   if (query.isLoading) {
+  //     return <Loader />
+  //   }
+  //   console.log(data)
+  //   hrefs.push(query.data)
+  // })
   return (
     <div>
       {searchItems?.slice(0,10).map((item) => (
-        <Text>{item.href}</Text>
+        <Text key={item.href}>{item.href}</Text>
       ))}
     </div>
   )

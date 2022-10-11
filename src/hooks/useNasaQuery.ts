@@ -6,7 +6,7 @@ import { NasaResponse, NasaSearchParams } from "../types";
 export const useNasaQuery = (params: NasaSearchParams) => {
   const urlNasaSearchUrl = urlNasaSearch(params);
 
-  return useQuery<NasaResponse>([urlNasaSearchUrl], () =>
+  return useQuery<NasaResponse, Error>([urlNasaSearchUrl], () =>
     fetch(urlNasaSearchUrl).then((res) => res.json())
   );
 };
