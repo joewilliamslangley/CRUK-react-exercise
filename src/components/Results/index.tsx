@@ -1,4 +1,4 @@
-import { Link, Loader, Text } from "@cruk/cruk-react-components";
+import { Link, Loader, Text, Box } from "@cruk/cruk-react-components";
 import { NasaSearchParams } from "../../types";
 import useNasaQuery from "../../hooks/useNasaQuery";
 import useReturnContent from "../../hooks/useReturnContent";
@@ -10,8 +10,12 @@ type ResultsProps = {
 
 export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   const { data, isLoading } = useNasaQuery(searchParams)
-  console.log(data)
   const queryResults = useReturnContent(data)
+  const queryInfo = data?.collection.items.map((item) => ({
+    title: item.data[0]?.title,
+    description: item.data[0]?.description,
+    nasaId: item.data[0]?.nasa_id
+  }))
   const contentLoading = queryResults.some(query => query.isLoading)
   onLoad(isLoading)
 
@@ -24,11 +28,21 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   }
 
   return (
-    <div>
-      {queryResults?.map((query) => (
-        <Link href={query.data[0]} key={query.data[0]}>{query.data[0]}</Link>
+    <Box paddingVertical="m">
+      {queryResults?.slice(0, 10).map((query, index) => (
+        <Box
+          key={queryInfo?.[index]?.nasaId}
+          marginBottom="s">
+          <Link
+            href={query.data[0]}
+            appearance="primary"
+          >
+            {queryInfo?.[index]?.title}
+          </Link>
+          <Text>{queryInfo?.[index]?.description}</Text>
+        </Box>
       ))}
-    </div>
+    </Box>
   )
 }
 
