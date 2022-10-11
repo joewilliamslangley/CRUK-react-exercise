@@ -55,14 +55,17 @@ export const HomePage = () => {
           control={control}
           defaultValue=""
           render={({ field: { value, onChange } }) =>
-            <TextField
-              onChange={onChange}
-              value={value}
-              label="Keywords"
-              required
-              hasError={typeof errors.keywords !== "undefined" }
-              errorMessage={errors.keywords?.message}
-            />}
+            <Box marginBottom="s">
+              <TextField
+                onChange={onChange}
+                value={value}
+                label="Keywords"
+                required
+                hasError={typeof errors.keywords !== "undefined" }
+                errorMessage={errors.keywords?.message}
+              />
+            </Box>
+          }
         />
 
         <Controller
@@ -70,32 +73,37 @@ export const HomePage = () => {
           control={control}
           defaultValue="image"
           render={({ field: { onChange } }) =>
-            <Select
-              onChange={onChange}
-              label="Media Type"
-              required
-              hasError={typeof errors.mediaType !== "undefined" }
-              errorMessage={errors.mediaType?.message}
-            >
-              <option disabled selected value=""> -- select an option -- </option>
-              <option value="audio">Audio</option>
-              <option value="video">Video</option>
-              <option value="image">Image</option>
-            </Select>
-            }
+            <Box marginBottom="s">
+              <Select
+                onChange={onChange}
+                label="Media Type"
+                required
+                hasError={typeof errors.mediaType !== "undefined" }
+                errorMessage={errors.mediaType?.message}
+              >
+                <option disabled selected value=""> -- select an option -- </option>
+                <option value="audio">Audio</option>
+                <option value="video">Video</option>
+                <option value="image">Image</option>
+              </Select>
+            </Box>
+          }
         />
 
         <Controller
           name="yearStart"
           control={control}
           render={({ field: { value, onChange } }) =>
-            <TextField
-              onChange={onChange}
-              value={value}
-              label="Minimum Year"
-              hasError={typeof errors.yearStart !== "undefined" }
-              errorMessage={errors.yearStart?.message}
-            />}
+            <Box marginBottom="s">
+              <TextField
+                onChange={onChange}
+                value={value}
+                label="Minimum Year"
+                hasError={typeof errors.yearStart !== "undefined" }
+                errorMessage={errors.yearStart?.message}
+              />
+            </Box>
+          }
         />
 
         <Button

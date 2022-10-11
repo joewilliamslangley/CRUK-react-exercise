@@ -1,4 +1,4 @@
-import { Link, Loader, Text, Box } from "@cruk/cruk-react-components";
+import { Link, Loader, Text, Box, Heading } from "@cruk/cruk-react-components";
 import { NasaSearchParams } from "../../types";
 import useNasaQuery from "../../hooks/useNasaQuery";
 import useReturnContent from "../../hooks/useReturnContent";
@@ -17,7 +17,7 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
     nasaId: item.data[0]?.nasa_id
   }))
   const contentLoading = queryResults.some(query => query.isLoading)
-  onLoad(isLoading)
+  onLoad(isLoading || contentLoading)
 
   if (isLoading || contentLoading) {
     return <Loader />
@@ -29,6 +29,7 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
 
   return (
     <Box paddingVertical="m">
+      <Heading h3>Results</Heading>
       {queryResults?.slice(0, 10).map((query, index) => (
         <Box
           key={queryInfo?.[index]?.nasaId}
@@ -36,10 +37,13 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
           <Link
             href={query.data[0]}
             appearance="primary"
+            target="_blank"
           >
             {queryInfo?.[index]?.title}
           </Link>
-          <Text>{queryInfo?.[index]?.description}</Text>
+          <Text>
+            {queryInfo?.[index]?.description.length > 500 ? `${queryInfo?.[index]?.description.substring(0, 500)}...` : queryInfo?.[index]?.description}
+          </Text>
         </Box>
       ))}
     </Box>
