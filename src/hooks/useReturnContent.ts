@@ -19,7 +19,6 @@ export const useReturnContent = (data: NasaResponse | undefined) => {
     i += 1
   }
 
-  console.log(contentQueries)
   return useQueries({queries: contentQueries})
 }
 
