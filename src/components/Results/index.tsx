@@ -9,6 +9,16 @@ type ResultsProps = {
 };
 
 export const Results = ({ searchParams, onLoad }: ResultsProps) => {
+  const abbreviateDescription = (text: string | undefined ) => {
+    if (typeof text === "undefined") {
+      return ''
+    }
+    if (text.length > 500) {
+      return `${text.substring(0,500)}...`
+    }
+    return text
+  }
+
   const { data, isLoading } = useNasaQuery(searchParams)
   const queryResults = useReturnContent(data)
   const queryInfo = data?.collection.items.map((item) => ({
@@ -42,7 +52,7 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
             {queryInfo?.[index]?.title}
           </Link>
           <Text>
-            {queryInfo?.[index]?.description.length > 500 ? `${queryInfo?.[index]?.description.substring(0, 500)}...` : queryInfo?.[index]?.description}
+            {abbreviateDescription(queryInfo?.[index]?.description)}
           </Text>
         </Box>
       ))}
