@@ -21,6 +21,9 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
 
   const { data, isLoading } = useNasaQuery(searchParams)
   const queryResults = useReturnContent(data)
+  const queryData = queryResults.map(query => (
+    query.data
+  ))
   const queryInfo = data?.collection.items.map((item) => ({
     title: item.data[0]?.title,
     description: item.data[0]?.description,
@@ -40,12 +43,12 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   return (
     <Box paddingVertical="m">
       <Heading h3>Results</Heading>
-      {queryResults?.slice(0, 10).map((query, index) => (
+      {queryData?.slice(0, 10).map((query, index) => (
         <Box
           key={queryInfo?.[index]?.nasaId}
           marginBottom="s">
           <Link
-            href={query.data[0]}
+            href={query?.[0]}
             appearance="primary"
             target="_blank"
           >
