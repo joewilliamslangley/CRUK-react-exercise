@@ -10,7 +10,8 @@ export const urlNasaSearch = ({
   const paramsObjectWithSnakeCaseKeys = {
     keywords,
     media_type: mediaType,
-    year_start: `${yearStart ?? ""}`,
+    ...(typeof yearStart !== "undefined" && { year_start: `${yearStart}`})
+    // year_start: `${yearStart ?? ""}`,
   };
   const paramsString = new URLSearchParams(
     paramsObjectWithSnakeCaseKeys
