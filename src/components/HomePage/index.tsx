@@ -8,9 +8,26 @@ import Results from "../Results";
 
 
 const schema = yup.object().shape({
-  keywords: yup.string().min(2, "Keywords must have at least 2 characters.").max(50, "keywords must have at most 50 characters.").required(),
-  yearStart: yup.number().typeError("Please enter a valid number.").integer("Please enter a valid number.").nullable(true).min(1900, "Year start must be after 1900.").max(new Date().getFullYear(), "Year start must not be in the future.").notRequired(),
-  mediaType: yup.string().oneOf(['audio', 'video', 'image'], "Please select a media type.").required("Please select a media type.")
+  keywords:
+    yup
+      .string()
+      .min(2, "Keywords must have at least 2 characters.")
+      .max(50, "keywords must have at most 50 characters.")
+      .required(),
+  yearStart:
+    yup
+      .number()
+      .transform((value: number) => (Number.isNaN(value) ? undefined : value))
+      .nullable()
+      .typeError("Please enter a valid number.")
+      .integer("Please enter a valid number.")
+      .min(1900, "Year start must be after 1900.")
+      .max(new Date().getFullYear(), "Year start must not be in the future."),
+  mediaType:
+    yup
+      .string()
+      .oneOf(['audio', 'video', 'image'], "Please select a media type.")
+      .required("Please select a media type.")
 });
 
 function onPromise<T>(promise: (event: SyntheticEvent) => Promise<T>) {

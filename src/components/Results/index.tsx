@@ -33,11 +33,19 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   onLoad(isLoading || contentLoading)
 
   if (isLoading || contentLoading) {
-    return <Loader />
+    return (
+      <Box paddingVertical="m">
+        <Loader />
+      </Box>
+    )
   }
 
   if (queryResults.length === 0) {
-    return <Text>Sorry, your reach did not return any results</Text>
+    return (
+      <Box paddingVertical="m">
+        <Text>Sorry, your reach did not return any results</Text>
+      </Box>
+      )
   }
 
   return (
