@@ -129,7 +129,7 @@ export const HomePage = () => {
             <Box marginBottom="s">
               <TextField
                 onChange={onChange}
-                value={undefined || value}
+                value={value}
                 label="Minimum Year"
                 hasError={typeof errors.yearStart !== "undefined" }
                 errorMessage={errors.yearStart?.message}
