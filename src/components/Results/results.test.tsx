@@ -1,4 +1,4 @@
-import { waitFor, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import Results from ".";
@@ -36,10 +36,34 @@ const testData = [
   }
 ]
 
-describe("Home", () => {
-  it('renders results when valid nasa data is returned', () => {
+describe("Results", () => {
+  it("renders results when valid nasa data is returned", () => {
     render(<Results apiResultData={testData} contentLoading={false} />)
-    const link = screen.getByRole('link')
-    expect(link).toBeInTheDocument()
+    const links = screen.getAllByRole('link')
+    expect(links.length).toEqual(5)
+  })
+
+  it("renders a loader without results when contentLoading is true", () => {
+    render(<Results apiResultData={undefined} contentLoading />)
+    const loaderCircles = screen.getByText('Loading')
+    const links = screen.queryByRole('link')
+    expect(loaderCircles).toBeInTheDocument();
+    expect(links).toBeNull()
+  })
+
+  it("displays a 'no results' when apiResultData is undefined", () => {
+    render(<Results apiResultData={undefined} contentLoading={false} />)
+    const message = screen.getByText('Sorry, your search did not return any results')
+    const links = screen.queryByRole('link')
+    expect(message).toBeInTheDocument();
+    expect(links).toBeNull()
+  })
+
+  it("displays a 'no results' when apiResultData is empty", () => {
+    render(<Results apiResultData={[]} contentLoading={false} />)
+    const message = screen.getByText('Sorry, your search did not return any results')
+    const links = screen.queryByRole('link')
+    expect(message).toBeInTheDocument();
+    expect(links).toBeNull()
   })
 })

@@ -17,8 +17,6 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
     return text
   }
 
-  console.log(apiResultData)
-
   const renderResults = () => {
     if (contentLoading) {
       return (
@@ -28,10 +26,10 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
       )
     }
 
-    if (apiResultData?.length === 0) {
+    if (typeof apiResultData === 'undefined' || apiResultData?.length === 0) {
       return (
         <Box paddingVertical="m">
-          <Text>Sorry, your reach did not return any results</Text>
+          <Text>Sorry, your search did not return any results</Text>
         </Box>
         )
     }
