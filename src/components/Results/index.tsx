@@ -18,7 +18,7 @@ export const Results = ({ mediaData, isContentLoading }: ResultsProps) => {
     if (typeof mediaData === 'undefined' || mediaData?.length === 0) {
       return (
         <Box marginBottom="s">
-          <Text>Sorry, your search did not return any results</Text>
+          <Text>Sorry, your search did not return any results.</Text>
         </Box>
         )
     }
