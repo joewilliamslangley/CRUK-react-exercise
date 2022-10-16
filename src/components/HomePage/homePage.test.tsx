@@ -1,29 +1,47 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 import "@testing-library/jest-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import HomePage from ".";
 
+const queryClient = new QueryClient();
+
+
 describe("Home", () => {
-  it("renders a heading", () => {
-    render(<HomePage />);
-    const heading = screen.getByRole("heading", { level: 1 });
-    expect(heading).toBeInTheDocument();
-    expect(heading).toHaveTextContent("React Exercise");
-  });
+  const renderPageAndGetForm = () => {
+    render(
+    <QueryClientProvider client={queryClient}>
+      <HomePage />
+    </QueryClientProvider>
+    );
+    return {
+      keywords: screen.getByLabelText("Keywords (required)"),
+      mediaType: screen.getByLabelText("Media Type (required)"),
+      minYear: screen.getByLabelText("Minimum Year"),
+      submit: screen.getByText("Submit")
+    }
+  }
 
   it("renders a form", () => {
-    render(<HomePage />);
-    const keywords = screen.getByLabelText("Keywords (required)")
-    const mediaType = screen.getByLabelText("Media Type (required)")
-    const minYear = screen.getByLabelText("Minimum Year")
-    const submit = screen.getByText("Submit")
+    const {keywords, mediaType, minYear, submit} = renderPageAndGetForm()
     expect(keywords).toBeInTheDocument()
     expect(mediaType).toBeInTheDocument()
     expect(minYear).toBeInTheDocument()
     expect(submit).toBeInTheDocument()
   })
 
-  // it("returns results with three search parameters", () => {})
+  it("returns results with three search parameters", async () => {
+    const {keywords, mediaType, minYear, submit} = renderPageAndGetForm()
+    await userEvent.type(keywords, 'space')
+    await userEvent.selectOptions(mediaType, 'image')
+    await userEvent.type(minYear, '1950')
+    await userEvent.click(submit)
+
+    const results = await screen.findByText("Results");
+    expect(results).toBeInTheDocument();
+    expect(results).toHaveTextContent("Results");
+  })
 
   // it("returns results when no minimum year is included", () => {})
 

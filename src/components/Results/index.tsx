@@ -32,41 +32,45 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
   const contentLoading = queryResults.some(query => query.isLoading)
   onLoad(isLoading || contentLoading)
 
-  if (isLoading || contentLoading) {
-    return (
-      <Box paddingVertical="m">
-        <Loader />
-      </Box>
-    )
-  }
-
-  if (queryResults.length === 0) {
-    return (
-      <Box paddingVertical="m">
-        <Text>Sorry, your reach did not return any results</Text>
-      </Box>
+  const renderResults = () => {
+    if (isLoading || contentLoading) {
+      return (
+        <Box paddingVertical="m">
+          <Loader />
+        </Box>
       )
+    }
+
+    if (queryResults.length === 0) {
+      return (
+        <Box paddingVertical="m">
+          <Text>Sorry, your reach did not return any results</Text>
+        </Box>
+        )
+    }
+
+    return queryData?.slice(0, 10).map((query, index) => (
+      <Box
+        key={queryInfo?.[index]?.nasaId}
+        marginBottom="s">
+        <Link
+          href={query?.[0]}
+          appearance="primary"
+          target="_blank"
+        >
+          {queryInfo?.[index]?.title}
+        </Link>
+        <Text>
+          {abbreviateDescription(queryInfo?.[index]?.description)}
+        </Text>
+      </Box>
+    ))
   }
 
   return (
     <Box paddingVertical="m">
       <Heading h3>Results</Heading>
-      {queryData?.slice(0, 10).map((query, index) => (
-        <Box
-          key={queryInfo?.[index]?.nasaId}
-          marginBottom="s">
-          <Link
-            href={query?.[0]}
-            appearance="primary"
-            target="_blank"
-          >
-            {queryInfo?.[index]?.title}
-          </Link>
-          <Text>
-            {abbreviateDescription(queryInfo?.[index]?.description)}
-          </Text>
-        </Box>
-      ))}
+      {renderResults()}
     </Box>
   )
 }
