@@ -57,14 +57,15 @@ export const HomePage = () => {
 
   const retrieveDataFromApiResults = (apiData: NasaResponse | undefined, apiQueryResults: UseQueryResult<string[], unknown>[]) => {
     const queryHrefs = apiQueryResults.map(query => (
-      query.data
+      query.data?.[0]
     ))
-    const queryData = apiData?.collection.items.map((item) => ({
+    const queryData = apiData?.collection.items.map((item, index) => ({
       title: item.data[0]?.title,
       description: item.data[0]?.description,
-      nasaId: item.data[0]?.nasa_id
+      nasaId: item.data[0]?.nasa_id,
+      href: queryHrefs[index]
     }))
-    return {queryHrefs, queryData}
+    return queryData
   }
 
   const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({

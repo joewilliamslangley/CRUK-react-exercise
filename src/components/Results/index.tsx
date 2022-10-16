@@ -26,7 +26,7 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
       )
     }
 
-    if (apiResultData.queryHrefs.length === 0) {
+    if (apiResultData?.length === 0) {
       return (
         <Box paddingVertical="m">
           <Text>Sorry, your reach did not return any results</Text>
@@ -34,19 +34,19 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
         )
     }
 
-    return apiResultData.queryHrefs?.slice(0, 10).map((query, index) => (
+    return apiResultData?.slice(0, 10).map((query) => (
       <Box
-        key={apiResultData.queryData?.[index]?.nasaId}
+        key={query.nasaId}
         marginBottom="s">
         <Link
-          href={query?.[0]}
+          href={query.href}
           appearance="primary"
           target="_blank"
         >
-          {apiResultData.queryData?.[index]?.title}
+          {query.title}
         </Link>
         <Text>
-          {abbreviateDescription(apiResultData.queryData?.[index]?.description)}
+          {abbreviateDescription(query.description)}
         </Text>
       </Box>
     ))
