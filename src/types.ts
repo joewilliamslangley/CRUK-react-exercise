@@ -17,7 +17,7 @@ export type ApiResponseData = {
   description: string | undefined;
   nasaId: string | undefined;
   href: string | undefined;
-}[]
+}[] | undefined
 
 export type ItemsType = {
   href: string;
