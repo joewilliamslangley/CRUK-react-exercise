@@ -12,6 +12,15 @@ export type NasaResponse = {
   };
 };
 
+export type ApiResponseData = {
+  queryHrefs: (string[] | undefined)[];
+  queryData: {
+      title: string | undefined;
+      description: string | undefined;
+      nasaId: string | undefined;
+  }[] | undefined;
+}
+
 export type ItemsType = {
   href: string;
   data: DataType[];
