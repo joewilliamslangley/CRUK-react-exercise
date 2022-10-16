@@ -1,10 +1,11 @@
 import { useState, SyntheticEvent } from "react";
 import { Heading, Box, TextField, Select, Button } from "@cruk/cruk-react-components";
 import { useForm, Controller } from "react-hook-form";
+import { UseQueryResult } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import useNasaQuery from "../../hooks/useNasaQuery";
-import { NasaSearchParams } from "../../types";
+import { NasaResponse, NasaSearchParams } from "../../types";
 import useReturnContent from "../../hooks/useReturnContent";
 import Results from "../Results";
 
@@ -53,6 +54,19 @@ export const HomePage = () => {
   const { data, isLoading } = useNasaQuery(params)
   const queryResults = useReturnContent(data)
   const contentLoading = queryResults.some(query => query.isLoading) || isLoading
+
+  const retrieveDataFromApiResults = (apiData: NasaResponse | undefined, apiQueryResults: UseQueryResult<string[], unknown>[]) => {
+    const queryHrefs = queryResults.map(query => (
+      query.data
+    ))
+    const queryData = data?.collection.items.map((item) => ({
+      title: item.data[0]?.title,
+      description: item.data[0]?.description,
+      nasaId: item.data[0]?.nasa_id
+    }))
+    return {queryHrefs, queryData}
+  }
+
 
   const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({
     resolver: yupResolver(schema),
@@ -133,7 +147,7 @@ export const HomePage = () => {
         </Button>
       </form>
 
-      {isSearch ? <Results apiData={data} queryResults={queryResults} contentLoading={contentLoading}/> : null}
+      {isSearch ? <Results apiResultData={retrieveDataFromApiResults(data, queryResults)} contentLoading={contentLoading}/> : null}
     </Box>
   );
 };

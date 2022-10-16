@@ -1,14 +1,12 @@
 import { Link, Loader, Text, Box, Heading } from "@cruk/cruk-react-components";
-import { UseQueryResult } from "@tanstack/react-query";
-import { NasaResponse } from "../../types";
+import { ApiResponseData } from "../../types";
 
 type ResultsProps = {
-  apiData: NasaResponse | undefined
-  queryResults: UseQueryResult<string[], unknown>[],
+  apiResultData: ApiResponseData
   contentLoading: boolean,
 };
 
-export const Results = ({ queryResults, contentLoading, apiData }: ResultsProps) => {
+export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
   const abbreviateDescription = (text: string | undefined ) => {
     if (typeof text === "undefined") {
       return ''
@@ -19,16 +17,6 @@ export const Results = ({ queryResults, contentLoading, apiData }: ResultsProps)
     return text
   }
 
-  const queryData = queryResults.map(query => (
-    query.data
-  ))
-  const queryInfo = apiData?.collection.items.map((item) => ({
-    title: item.data[0]?.title,
-    description: item.data[0]?.description,
-    nasaId: item.data[0]?.nasa_id
-  }))
-
-
   const renderResults = () => {
     if (contentLoading) {
       return (
@@ -38,7 +26,7 @@ export const Results = ({ queryResults, contentLoading, apiData }: ResultsProps)
       )
     }
 
-    if (queryResults.length === 0) {
+    if (apiResultData.queryHrefs.length === 0) {
       return (
         <Box paddingVertical="m">
           <Text>Sorry, your reach did not return any results</Text>
@@ -46,19 +34,19 @@ export const Results = ({ queryResults, contentLoading, apiData }: ResultsProps)
         )
     }
 
-    return queryData?.slice(0, 10).map((query, index) => (
+    return apiResultData.queryHrefs?.slice(0, 10).map((query, index) => (
       <Box
-        key={queryInfo?.[index]?.nasaId}
+        key={apiResultData.queryData?.[index]?.nasaId}
         marginBottom="s">
         <Link
           href={query?.[0]}
           appearance="primary"
           target="_blank"
         >
-          {queryInfo?.[index]?.title}
+          {apiResultData.queryData?.[index]?.title}
         </Link>
         <Text>
-          {abbreviateDescription(queryInfo?.[index]?.description)}
+          {abbreviateDescription(apiResultData.queryData?.[index]?.description)}
         </Text>
       </Box>
     ))
