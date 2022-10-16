@@ -25,3 +25,4 @@ These are some of the features to be added and changes to be made in the future:
 - Cards that display the media on the page without the user having to click on the link.
 - Refactoring code within the test files to improve clarity/efficiency.
 - Fix warning message that appears in console when user enters a minimum year ("Warning: A component is changing an uncontrolled input to be controlled.").
+- Fix console error that occurs when testing ("ReferenceError: fetch is not defined").
