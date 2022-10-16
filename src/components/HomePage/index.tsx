@@ -108,11 +108,12 @@ export const HomePage = () => {
               <Select
                 onChange={onChange}
                 label="Media Type"
+                defaultValue=""
                 required
                 hasError={typeof errors.mediaType !== "undefined" }
                 errorMessage={errors.mediaType?.message}
               >
-                <option disabled selected value=""> -- select an option -- </option>
+                <option disabled value=""> -- select an option -- </option>
                 <option value="audio">Audio</option>
                 <option value="video">Video</option>
                 <option value="image">Image</option>
@@ -128,7 +129,7 @@ export const HomePage = () => {
             <Box marginBottom="s">
               <TextField
                 onChange={onChange}
-                value={value}
+                value={undefined || value}
                 label="Minimum Year"
                 hasError={typeof errors.yearStart !== "undefined" }
                 errorMessage={errors.yearStart?.message}
