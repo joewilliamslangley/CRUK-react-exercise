@@ -56,17 +56,16 @@ export const HomePage = () => {
   const contentLoading = queryResults.some(query => query.isLoading) || isLoading
 
   const retrieveDataFromApiResults = (apiData: NasaResponse | undefined, apiQueryResults: UseQueryResult<string[], unknown>[]) => {
-    const queryHrefs = queryResults.map(query => (
+    const queryHrefs = apiQueryResults.map(query => (
       query.data
     ))
-    const queryData = data?.collection.items.map((item) => ({
+    const queryData = apiData?.collection.items.map((item) => ({
       title: item.data[0]?.title,
       description: item.data[0]?.description,
       nasaId: item.data[0]?.nasa_id
     }))
     return {queryHrefs, queryData}
   }
-
 
   const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({
     resolver: yupResolver(schema),
