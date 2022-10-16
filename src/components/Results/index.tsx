@@ -25,7 +25,6 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
         </Box>
       )
     }
-
     if (typeof apiResultData === 'undefined' || apiResultData?.length === 0) {
       return (
         <Box paddingVertical="m">
@@ -33,7 +32,6 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
         </Box>
         )
     }
-
     return apiResultData?.slice(0, 10).map((query) => (
       <Box
         key={query.nasaId}

@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query";
 import { NasaResponse } from "../types";
 
-export const useReturnContent = (data: NasaResponse | undefined) => {
+export const useReturnMediaFromNasaJson = (data: NasaResponse | undefined) => {
   const contentQueries = []
   let i = 0
   let length
@@ -21,4 +21,4 @@ export const useReturnContent = (data: NasaResponse | undefined) => {
   return useQueries({queries: contentQueries})
 }
 
-export default useReturnContent;
+export default useReturnMediaFromNasaJson;
