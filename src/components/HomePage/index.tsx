@@ -1,14 +1,12 @@
 import { useState, SyntheticEvent } from "react";
 import { Heading, Box, TextField, Select, Button } from "@cruk/cruk-react-components";
 import { useForm, Controller } from "react-hook-form";
-import { UseQueryResult } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import useNasaQuery from "../../hooks/useNasaQuery";
-import { NasaResponse, NasaSearchParams } from "../../types";
-import useReturnContent from "../../hooks/useReturnContent";
+import { NasaSearchParams } from "../../types";
+import useReturnMediaFromNasaJson from "../../hooks/useReturnMediaFromNasaJson";
 import Results from "../Results";
-
 
 const schema = yup.object().shape({
   keywords:
@@ -33,6 +31,7 @@ const schema = yup.object().shape({
       .required("Please select a media type.")
 });
 
+// function to enable 'onSubmit' to run without errors
 function onPromise<T>(promise: (event: SyntheticEvent) => Promise<T>) {
   return (event: SyntheticEvent) => {
     if (promise) {
@@ -41,31 +40,31 @@ function onPromise<T>(promise: (event: SyntheticEvent) => Promise<T>) {
   };
 }
 
-export const HomePage = () => {
-  const exampleParam: NasaSearchParams = {
-    keywords: "moon",
-    yearStart: 2000,
-    mediaType: "image",
-  };
+const exampleParam: NasaSearchParams = {
+  keywords: "moon",
+  yearStart: 2000,
+  mediaType: "image",
+};
 
+export const HomePage = () => {
   const [params, setParams] = useState(exampleParam)
   const [isSearch, setIsSearch] = useState(false)
 
   const { data, isLoading } = useNasaQuery(params, isSearch)
-  const queryResults = useReturnContent(data)
-  const contentLoading = queryResults.some(query => query.isLoading) || isLoading
+  const mediaQueryResults = useReturnMediaFromNasaJson(data)
+  const isContentLoading = mediaQueryResults.some(query => query.isLoading) || isLoading
 
-  const retrieveDataFromApiResults = (apiData: NasaResponse | undefined, apiQueryResults: UseQueryResult<string[], unknown>[]) => {
-    const queryHrefs = apiQueryResults.map(query => (
+  const retrieveDataFromApiResults = () => {
+    const mediaHrefs = mediaQueryResults.map(query => (
       query.data?.[0]
     ))
-    const queryData = apiData?.collection.items.map((item, index) => ({
+    const mediaData = data?.collection.items.map((item, index) => ({
       title: item.data[0]?.title,
       description: item.data[0]?.description,
       nasaId: item.data[0]?.nasa_id,
-      href: queryHrefs[index]
+      href: mediaHrefs[index]
     }))
-    return queryData
+    return mediaData
   }
 
   const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({
@@ -142,13 +141,13 @@ export const HomePage = () => {
         <Button
           appearance="primary"
           type="submit"
-          disabled={contentLoading && isSearch}
+          disabled={isContentLoading && isSearch}
         >
-          {contentLoading && isSearch ? "Submitting..." : "Submit"}
+          {isContentLoading && isSearch ? "Submitting..." : "Submit"}
         </Button>
       </form>
 
-      {isSearch ? <Results apiResultData={retrieveDataFromApiResults(data, queryResults)} contentLoading={contentLoading}/> : null}
+      {isSearch ? <Results mediaData={retrieveDataFromApiResults()} isContentLoading={isContentLoading}/> : null}
     </Box>
   );
 };

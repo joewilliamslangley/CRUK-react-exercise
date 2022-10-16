@@ -2,37 +2,27 @@ import { Link, Loader, Text, Box, Heading } from "@cruk/cruk-react-components";
 import { ApiResponseData } from "../../types";
 
 type ResultsProps = {
-  apiResultData: ApiResponseData
-  contentLoading: boolean,
+  mediaData: ApiResponseData
+  isContentLoading: boolean,
 };
 
-export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
-  const abbreviateDescription = (text: string | undefined ) => {
-    if (typeof text === "undefined") {
-      return ''
-    }
-    if (text.length > 500) {
-      return `${text.substring(0,500)}...`
-    }
-    return text
-  }
-
+export const Results = ({ mediaData, isContentLoading }: ResultsProps) => {
   const renderResults = () => {
-    if (contentLoading) {
+    if (isContentLoading) {
       return (
         <Box paddingVertical="m">
           <Loader />
         </Box>
       )
     }
-    if (typeof apiResultData === 'undefined' || apiResultData?.length === 0) {
+    if (typeof mediaData === 'undefined' || mediaData?.length === 0) {
       return (
         <Box paddingVertical="m">
           <Text>Sorry, your search did not return any results</Text>
         </Box>
         )
     }
-    return apiResultData?.slice(0, 10).map((query) => (
+    return mediaData?.slice(0, 10).map((query) => (
       <Box
         key={query.nasaId}
         marginBottom="s">
@@ -48,6 +38,16 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
         </Text>
       </Box>
     ))
+  }
+
+  const abbreviateDescription = (text: string | undefined ) => {
+    if (typeof text === "undefined") {
+      return ''
+    }
+    if (text.length > 500) {
+      return `${text.substring(0,500)}...`
+    }
+    return text
   }
 
   return (
