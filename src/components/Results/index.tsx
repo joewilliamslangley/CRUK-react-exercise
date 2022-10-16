@@ -1,14 +1,14 @@
 import { Link, Loader, Text, Box, Heading } from "@cruk/cruk-react-components";
-import { NasaSearchParams } from "../../types";
-import useNasaQuery from "../../hooks/useNasaQuery";
-import useReturnContent from "../../hooks/useReturnContent";
+import { UseQueryResult } from "@tanstack/react-query";
+import { NasaResponse } from "../../types";
 
 type ResultsProps = {
-  searchParams: NasaSearchParams,
-  onLoad: (status: boolean) => void
+  apiData: NasaResponse | undefined
+  queryResults: UseQueryResult<string[], unknown>[],
+  contentLoading: boolean,
 };
 
-export const Results = ({ searchParams, onLoad }: ResultsProps) => {
+export const Results = ({ queryResults, contentLoading, apiData }: ResultsProps) => {
   const abbreviateDescription = (text: string | undefined ) => {
     if (typeof text === "undefined") {
       return ''
@@ -19,21 +19,18 @@ export const Results = ({ searchParams, onLoad }: ResultsProps) => {
     return text
   }
 
-  const { data, isLoading } = useNasaQuery(searchParams)
-  const queryResults = useReturnContent(data)
   const queryData = queryResults.map(query => (
     query.data
   ))
-  const queryInfo = data?.collection.items.map((item) => ({
+  const queryInfo = apiData?.collection.items.map((item) => ({
     title: item.data[0]?.title,
     description: item.data[0]?.description,
     nasaId: item.data[0]?.nasa_id
   }))
-  const contentLoading = queryResults.some(query => query.isLoading)
-  onLoad(isLoading || contentLoading)
+
 
   const renderResults = () => {
-    if (isLoading || contentLoading) {
+    if (contentLoading) {
       return (
         <Box paddingVertical="m">
           <Loader />

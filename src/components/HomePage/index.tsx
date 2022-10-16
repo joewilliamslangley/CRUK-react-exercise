@@ -3,7 +3,9 @@ import { Heading, Box, TextField, Select, Button } from "@cruk/cruk-react-compon
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import useNasaQuery from "../../hooks/useNasaQuery";
 import { NasaSearchParams } from "../../types";
+import useReturnContent from "../../hooks/useReturnContent";
 import Results from "../Results";
 
 
@@ -47,20 +49,19 @@ export const HomePage = () => {
 
   const [params, setParams] = useState(exampleParam)
   const [isSearch, setIsSearch] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+
+  const { data, isLoading } = useNasaQuery(params)
+  const queryResults = useReturnContent(data)
+  const contentLoading = queryResults.some(query => query.isLoading) || isLoading
 
   const { handleSubmit, control, formState: { errors } } = useForm<NasaSearchParams>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = handleSubmit((data: NasaSearchParams) => {
-    setParams(data)
+  const onSubmit = handleSubmit((searchParams: NasaSearchParams) => {
+    setParams(searchParams)
     setIsSearch(true)
   })
-
-  const onLoad = (status: boolean) => {
-    setIsLoading(status)
-  }
 
   return (
     <Box marginTop="s" paddingTop="s">
@@ -126,13 +127,13 @@ export const HomePage = () => {
         <Button
           appearance="primary"
           type="submit"
-          disabled={isLoading}
+          disabled={contentLoading}
         >
           {isLoading ? "Submitting..." : "Submit"}
         </Button>
       </form>
 
-      {isSearch ? <Results searchParams={params} onLoad={onLoad}/> : null}
+      {isSearch ? <Results apiData={data} queryResults={queryResults} contentLoading={contentLoading}/> : null}
     </Box>
   );
 };
