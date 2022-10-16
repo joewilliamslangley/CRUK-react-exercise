@@ -23,5 +23,5 @@ These are some of the features to be added and changes to be made in the future:
 - Pagination that allows the user to see more than 10 results.
 - Collapsible cards in the results that allow the user to expand and hide the descriptions if they are particularly long.
 - Cards that display the media on the page without the user having to click on the link.
-- Refactoring code within the test files to improve clarity/efficiency
+- Refactoring code within the test files to improve clarity/efficiency.
 - Fix warning message that appears in console when user enters a minimum year ("Warning: A component is changing an uncontrolled input to be controlled.").
