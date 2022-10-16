@@ -17,6 +17,8 @@ export const Results = ({ apiResultData, contentLoading }: ResultsProps) => {
     return text
   }
 
+  console.log(apiResultData)
+
   const renderResults = () => {
     if (contentLoading) {
       return (

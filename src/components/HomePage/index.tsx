@@ -51,7 +51,7 @@ export const HomePage = () => {
   const [params, setParams] = useState(exampleParam)
   const [isSearch, setIsSearch] = useState(false)
 
-  const { data, isLoading } = useNasaQuery(params)
+  const { data, isLoading } = useNasaQuery(params, isSearch)
   const queryResults = useReturnContent(data)
   const contentLoading = queryResults.some(query => query.isLoading) || isLoading
 
@@ -142,9 +142,9 @@ export const HomePage = () => {
         <Button
           appearance="primary"
           type="submit"
-          disabled={contentLoading}
+          disabled={contentLoading && isSearch}
         >
-          {isLoading ? "Submitting..." : "Submit"}
+          {contentLoading && isSearch ? "Submitting..." : "Submit"}
         </Button>
       </form>
 
